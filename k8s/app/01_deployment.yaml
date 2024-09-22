@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: app
+        image: markavreliy/pyforum:v3
+        ports:
+        - containerPort: 8000
+        env:
+        # Database
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: DB_PORT
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_DB
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+            key: SECRET_KEY
+        # PGadmin user
+        - name: PGADMIN_EMAIL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: PGADMIN_EMAIL
+        - name: PGADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+            key: PGADMIN_PASSWORD
+        # Django superuser
+        - name: DJANGO_SUPERUSER_EMAIL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DJANGO_SUPERUSER_EMAIL
+        - name: DJANGO_SUPERUSER_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DJANGO_SUPERUSER_USERNAME
+        - name: DJANGO_SUPERUSER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+            key: DJANGO_SUPERUSER_PASSWORD
+        # SMTP
+        - name: EMAIL_BACKEND
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: EMAIL_BACKEND
+        - name: EMAIL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: EMAIL_HOST
+        - name: EMAIL_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: EMAIL_PORT
+        - name: EMAIL_USE_TLS
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: EMAIL_USE_TLS
+        - name: EMAIL_HOST_USER
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: EMAIL_HOST_USER
+        - name: EMAIL_HOST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+            key: EMAIL_HOST_PASSWORD
+        # CORS
+        - name: CORS_ORIGIN_WHITELIST
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: CORS_ORIGIN_WHITELIST
+        # Domaine
+        - name: DOMAINE
+          valueFrom:
+            configMapKeyRef:
+              name: traefik-config
+              key: DOMAINE
