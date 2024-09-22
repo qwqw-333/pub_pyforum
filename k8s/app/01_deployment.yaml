@@ -48,7 +48,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: postgres-secret
-            key: SECRET_KEY
+              key: SECRET_KEY
         # PGadmin user
         - name: PGADMIN_EMAIL
           valueFrom:
@@ -59,7 +59,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: postgres-secret
-            key: PGADMIN_PASSWORD
+              key: PGADMIN_PASSWORD
         # Django superuser
         - name: DJANGO_SUPERUSER_EMAIL
           valueFrom:
@@ -75,7 +75,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: app-secret
-            key: DJANGO_SUPERUSER_PASSWORD
+              key: DJANGO_SUPERUSER_PASSWORD
         # SMTP
         - name: EMAIL_BACKEND
           valueFrom:
@@ -106,7 +106,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: app-secret
-            key: EMAIL_HOST_PASSWORD
+              key: EMAIL_HOST_PASSWORD
         # CORS
         - name: CORS_ORIGIN_WHITELIST
           valueFrom:
