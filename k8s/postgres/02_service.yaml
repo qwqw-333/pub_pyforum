@@ -3,8 +3,8 @@ kind: Service
 metadata:
   name: postgres-service
 spec:
-  type: ClusterIP  # Делаем сервис доступным только внутри кластера
+  type: ClusterIP
   ports:
-    - port: 5432  # Внутренний порт базы данных
+    - port: 5432
   selector:
     app: postgres
