@@ -1,28 +1,32 @@
-name: Lint Python Code
+name: Docker Compose Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
 
 jobs:
-  lint:
+
+  build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v3
     
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-        
-    - name: Install dependencies
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/myapp:$(date +%s)
+      
+    - name: Docker Compose Build
+      run: docker-compose build
+      
+    - name: Docker Compose Up
       run: |
-        python -m pip install --upgrade pip
-        pip install flake8
+        docker-compose up -d
+        docker-compose ps
         
-    - name: Lint with flake8
+    - name: Test
       run: |
-        # остановить сборку при любых ошибках линтера
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        docker-compose exec -T app python manage.py test
         
-        # предупреждения линтера для менее критических проблем
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Docker Compose Down
+      if: always()
+      run: docker-compose down
