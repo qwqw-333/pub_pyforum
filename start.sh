@@ -1,8 +1,6 @@
 #!/bin/sh
 
 # DB migrate
-mkdir -p authentication/migrations
-touch authentication/migrations/__init__.py
 python manage.py makemigrations authentication
 python manage.py migrate authentication
 python manage.py makemigrations profiles
