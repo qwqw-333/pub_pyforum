@@ -17,7 +17,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb
+          POSTGRES_DB: forum
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -38,9 +38,25 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        
-    - name: Run migrations
+
+    - name: Make migrations for authentication app
+      run: python manage.py makemigrations authentication
+
+    - name: Migrate authentication app
+      run: python manage.py migrate authentication
+
+    - name: Make migrations for profiles app
+      run: python manage.py makemigrations profiles
+
+    - name: Migrate profiles app
+      run: python manage.py migrate profiles
+    
+    - name: Make migrate 
+      run: python manage.py makemigrations
+      
+    - name: Migrate
       run: python manage.py migrate
+      
       env:
         CORS_ORIGIN_WHITELIST: ""
         SECRET_KEY: +qne_u^_r3l^y9=vvfsvrbj+0%4e7&$iwm6hta2s+!b)r=1l!r
