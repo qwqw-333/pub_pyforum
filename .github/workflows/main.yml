@@ -39,33 +39,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Run migrations and tests
+      run: |
+        python manage.py makemigrations authentication
+        python manage.py migrate authentication
+        python manage.py makemigrations profiles
+        python manage.py migrate profiles
+        python manage.py makemigrations
+        python manage.py migrate
+        python manage.py test
       env:
         CORS_ORIGIN_WHITELIST: ""
-        SECRET_KEY: +qne_u^_r3l^y9=vvfsvrbj+0%4e7&$iwm6hta2s+!b)r=1l!r
-        POSTGRES_HOST: localhost
-        POSTGRES_PORT: 5432
-
-    - name: Make migrations for authentication app
-      run: python manage.py makemigrations authentication
-
-    - name: Migrate authentication app
-      run: python manage.py migrate authentication
-
-    - name: Make migrations for profiles app
-      run: python manage.py makemigrations profiles
-
-    - name: Migrate profiles app
-      run: python manage.py migrate profiles
-    
-    - name: Make migrate 
-      run: python manage.py makemigrations
-      
-    - name: Migrate
-      run: python manage.py migrate
-        
-    - name: Run tests
-      run: python manage.py test
-      env:
+        SECRET_KEY: "+qne_u^_r3l^y9=vvfsvrbj+0%4e7&$iwm6hta2s+!b)r=1l!r"
         POSTGRES_HOST: localhost
         POSTGRES_PORT: 5432
 
