@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "authentication",
     "profiles",
     "administration",
-    #"search",
+    # "search",
 ]
 
 MIDDLEWARE = [
@@ -62,9 +62,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-# ...
+    # ...
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", # Here
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Here
     # .
 ]
 CORS_ALLOW_CREDENTIALS = True
@@ -158,9 +158,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR)
-STATICFILES_DIRS=[os.path.join(BASE_DIR, "static"), ]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
@@ -237,7 +237,8 @@ LOGGING = {
         'file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'), # Замініть шлях на реальний шлях до файлу логу помилок
+            # Замініть шлях на реальний шлях до файлу логу помилок
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
         },
     },
     'loggers': {

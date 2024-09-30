@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: app
+        # TODO: CHANGE IMAGE
+        image: ghcr.io/qwqw-333/pyforum:v0.0.1
+        ports:
+        - containerPort: 8000
+        env:
+        # DB env
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_DB
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: POSTGRES_PASSWORD
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: SECRET_KEY
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: DB_PORT
+        # App env
+          - name: PGADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: PGADMIN_PASSWORD
+          - name: DJANGO_SUPERUSER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: DJANGO_SUPERUSER_PASSWORD
+          - name: EMAIL_HOST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: EMAIL_HOST_PASSWORD
+          - name: PGADMIN_EMAIL
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: PGADMIN_EMAIL
+          - name: DJANGO_SUPERUSER_EMAIL
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: DJANGO_SUPERUSER_EMAIL
+          - name: DJANGO_SUPERUSER_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: DJANGO_SUPERUSER_USERNAME
+          - name: EMAIL_BACKEND
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: EMAIL_BACKEND
+          - name: EMAIL_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: EMAIL_HOST
+          - name: EMAIL_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: EMAIL_PORT
+          - name: EMAIL_USE_TLS
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: EMAIL_USE_TLS
+          - name: EMAIL_HOST_USER
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: EMAIL_HOST_USER
+          - name: CORS_ORIGIN_WHITELIST
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: CORS_ORIGIN_WHITELIST
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
