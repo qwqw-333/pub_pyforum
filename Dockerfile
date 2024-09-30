@@ -7,7 +7,7 @@ WORKDIR /app
 COPY ./requirements.txt .
 
 # Install requirements
-RUN pip install --no-cache-dir -r requirements.txt && mkdir -p /app/logs
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Else code copy
 COPY . .
