@@ -51,8 +51,11 @@ jobs:
       env:
         CORS_ORIGIN_WHITELIST: ""
         SECRET_KEY: "+qne_u^_r3l^y9=vvfsvrbj+0%4e7&$iwm6hta2s+!b)r=1l!r"
-        POSTGRES_HOST: localhost
-        POSTGRES_PORT: 5432
+        PG_DB: "forum"
+        PG_USER: "postgres"
+        PG_PASSWORD: "postgres"
+        DB_HOST: "localhost"
+        DB_PORT: "5432"
 
   deploy:
     needs: test
