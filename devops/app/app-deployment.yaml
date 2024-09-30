@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
       - name: app
-        # TODO: CHANGE IMAGE
-        image: ghcr.io/qwqw-333/pyforum:v0.0.1
+        image: ghcr.io/qwqw-333/pub_pyforum:v0.0.2
         ports:
         - containerPort: 8000
         env:
