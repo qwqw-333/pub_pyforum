@@ -3,11 +3,12 @@ kind: ConfigMap
 metadata:
   name: app-config
 data:
-  PGADMIN_EMAIL: admin@admin.com
+  PGADMIN_PASSWORD: admin@admin.com
   DJANGO_SUPERUSER_EMAIL: admin@mail.net
   DJANGO_SUPERUSER_USERNAME: admin
+  EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
   EMAIL_HOST: someuser@gmail.com
   EMAIL_PORT: 587
   EMAIL_USE_TLS: 1
   EMAIL_HOST_USER: test@test.com
-  CORS_ORIGIN_WHITELIST:
+  CORS_ORIGIN_WHITELIST: ""
