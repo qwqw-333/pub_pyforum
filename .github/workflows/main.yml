@@ -52,7 +52,7 @@ jobs:
         SECRET_KEY: "+n4ln69zapa2gw2f8l26#v5vyry^jdo3nx)*w*px)c3l3j%bhl"
         PG_DB: forum
         PG_USER: postgres
-        PG_PASSWORD: D8e5mPeeJhD7vLJt
+        PG_PASSWORD: postgres
         DB_HOST: localhost
         DB_PORT: 5432
         PGADMIN_EMAIL: admin@admin.com
