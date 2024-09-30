@@ -49,13 +49,24 @@ jobs:
         python manage.py migrate
         python manage.py test
       env:
+        SECRET_KEY: "+n4ln69zapa2gw2f8l26#v5vyry^jdo3nx)*w*px)c3l3j%bhl"
+        PG_DB: forum
+        PG_USER: postgres
+        PG_PASSWORD: D8e5mPeeJhD7vLJt
+        DB_HOST: localhost
+        DB_PORT: 5432
+        PGADMIN_EMAIL: admin@admin.com
+        PGADMIN_PASSWORD: MTNy7neRDqAL8YBw
+        DJANGO_SUPERUSER_EMAIL: admin@mail.net
+        DJANGO_SUPERUSER_USERNAME: admin
+        DJANGO_SUPERUSER_PASSWORD: 7znYRa4ZzYrxvmRN
+        EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
+        EMAIL_HOST: someuser@gmail.com
+        EMAIL_PORT: 587
+        EMAIL_USE_TLS: 1
+        EMAIL_HOST_USER: test@test.com
+        EMAIL_HOST_PASSWORD: gHfQPdVnK3MST2K8
         CORS_ORIGIN_WHITELIST: ""
-        SECRET_KEY: "+qne_u^_r3l^y9=vvfsvrbj+0%4e7&$iwm6hta2s+!b)r=1l!r"
-        PG_DB: "forum"
-        PG_USER: "postgres"
-        PG_PASSWORD: "postgres"
-        DB_HOST: "localhost"
-        DB_PORT: "5432"
 
   deploy:
     needs: test
