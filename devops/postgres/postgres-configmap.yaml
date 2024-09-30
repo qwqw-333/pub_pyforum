@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: postgres-config
 data:
-  POSTGRES_DB: forum
+  POSTGRES_DB: app
   POSTGRES_USER: postgres
   DB_HOST: backend-db
   DB_PORT: 5432
