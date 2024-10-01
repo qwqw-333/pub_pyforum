@@ -67,33 +67,3 @@ jobs:
         EMAIL_HOST_USER: test@test.com
         EMAIL_HOST_PASSWORD: gHfQPdVnK3MST2K8
         CORS_ORIGIN_WHITELIST: ""
-
-  deploy:
-    needs: test
-    
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-      
-    - name: Docker build and push
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
-      run: |
-        docker build -t myapp .
-        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-        docker push myapp
-        
-    - name: Deploy to server  
-      env:
-        SSH_USER: ${{ secrets.SSH_USER }}
-        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-        SSH_HOST: ${{ secrets.SSH_HOST }}
-      run: |
-        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST '
-          docker pull myapp
-          docker stop myapp
-          docker rm myapp
-          docker run -d --name myapp myapp
-        '
