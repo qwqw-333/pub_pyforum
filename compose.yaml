@@ -1,8 +1,8 @@
 services:
   app:
     container_name: app
-    build: .
-#    image: markavreliy/pyforum:v3
+#    build: .
+    image: ghcr.io/qwqw-333/pub_pyforum/app:0.0.1
     restart: unless-stopped
 #    ports:
 #      - 80:80

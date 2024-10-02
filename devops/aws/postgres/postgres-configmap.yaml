@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  POSTGRES_DB: "forum"
+  POSTGRES_USER: "postgres"
+  DB_HOST: "myapp-postgres.czys4gss0eu5.us-east-1.rds.amazonaws.com"
+  DB_PORT: "5432"
