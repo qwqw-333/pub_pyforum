@@ -89,16 +89,19 @@ jobs:
     - name: Get previous version
       id: get_version
       run: |
-        PREV_VERSION=$(curl -s https://api.github.com/repos/${{ github.repository }}/packages/container/app/versions | jq '.[0].metadata.container.tags[0]' -r)
+        PREV_VERSION=$(curl -s https://api.github.com/repos/${{ github.repository }}/packages/container/app/versions | jq -r '.[].metadata.container.tags[] | select(test("^\\d+\\.\\d+\\.\\d+$"))' | sort -V | tail -n1)
+        if [ -z "$PREV_VERSION" ]; then
+          PREV_VERSION="0.0.0"
+        fi
         echo "PREV_VERSION=${PREV_VERSION}" >> $GITHUB_OUTPUT
 
     - name: Bump version
       id: bump_version
       run: |
         IFS='.' read -ra VERSION_PARTS <<< "${{ steps.get_version.outputs.PREV_VERSION }}"
-        MAJOR=${VERSION_PARTS[0]}
-        MINOR=${VERSION_PARTS[1]}
-        PATCH=$((VERSION_PARTS[2] + 1))
+        MAJOR=${VERSION_PARTS[0]:-0}
+        MINOR=${VERSION_PARTS[1]:-0}
+        PATCH=$((${VERSION_PARTS[2]:-0} + 1))
         NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_OUTPUT
 
