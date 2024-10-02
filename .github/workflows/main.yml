@@ -67,14 +67,18 @@ jobs:
         EMAIL_HOST_USER: test@test.com
         EMAIL_HOST_PASSWORD: gHfQPdVnK3MST2K8
         CORS_ORIGIN_WHITELIST: ""
-
+  
   build-and-push:
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -109,6 +113,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
+        platforms: linux/amd64,linux/arm64
         push: true
         tags: |
           ghcr.io/${{ github.repository }}/app:latest
