@@ -19,26 +19,26 @@ spec:
         - containerPort: 8000
         env:
         # DB env
-          - name: POSTGRES_DB
-            valueFrom:
-              configMapKeyRef:
-                name: postgres-config
-                key: POSTGRES_DB
-          - name: POSTGRES_USER
-            valueFrom:
-              configMapKeyRef:
-                name: postgres-config
-                key: POSTGRES_USER
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres-secret
-                key: POSTGRES_PASSWORD
           - name: SECRET_KEY
             valueFrom:
               secretKeyRef:
                 name: postgres-secret
                 key: SECRET_KEY
+          - name: PG_DB
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_DB
+          - name: PG_USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: POSTGRES_USER
+          - name: PG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: POSTGRES_PASSWORD
           - name: DB_HOST
             valueFrom:
               configMapKeyRef:
@@ -50,26 +50,16 @@ spec:
                 name: postgres-config
                 key: DB_PORT
         # App env
-          - name: PGADMIN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: app-secret
-                key: PGADMIN_PASSWORD
-          - name: DJANGO_SUPERUSER_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: app-secret
-                key: DJANGO_SUPERUSER_PASSWORD
-          - name: EMAIL_HOST_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: app-secret
-                key: EMAIL_HOST_PASSWORD
           - name: PGADMIN_EMAIL
             valueFrom:
               configMapKeyRef:
                 name: app-config
                 key: PGADMIN_EMAIL
+          - name: PGADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: PGADMIN_PASSWORD
           - name: DJANGO_SUPERUSER_EMAIL
             valueFrom:
               configMapKeyRef:
@@ -80,6 +70,11 @@ spec:
               configMapKeyRef:
                 name: app-config
                 key: DJANGO_SUPERUSER_USERNAME
+          - name: DJANGO_SUPERUSER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: DJANGO_SUPERUSER_PASSWORD
           - name: EMAIL_BACKEND
             valueFrom:
               configMapKeyRef:
@@ -105,6 +100,11 @@ spec:
               configMapKeyRef:
                 name: app-config
                 key: EMAIL_HOST_USER
+          - name: EMAIL_HOST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: EMAIL_HOST_PASSWORD
           - name: CORS_ORIGIN_WHITELIST
             valueFrom:
               configMapKeyRef:
