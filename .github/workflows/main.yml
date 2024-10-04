@@ -8,7 +8,7 @@ on:
 
 permissions:
   contents: read
-  packages: read
+  packages: write
 
 jobs:
   
@@ -94,45 +94,26 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Get previous version
+    - name: Get latest version
       id: get_version
       run: |
-        PACKAGES=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/packages)
-        if [ $? -ne 0 ]; then
-          echo "Error fetching packages"
-          exit 1
-        fi
-        echo "API Response (Packages):"
-        echo "$PACKAGES" | jq '.'
-        
-        APP_PACKAGE_ID=$(echo "$PACKAGES" | jq -r '.[] | select(.name=="app") | .id')
-        if [ -z "$APP_PACKAGE_ID" ]; then
-          echo "App package not found. Setting initial version."
-          PREV_VERSION="0.0.0"
-        else
-          VERSIONS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/packages/container/${APP_PACKAGE_ID}/versions)
-          echo "API Response (Versions):"
-          echo "$VERSIONS" | jq '.'
-          
-          PREV_VERSION=$(echo "$VERSIONS" | jq -r '.[].metadata.container.tags[]? // empty | select(test("^\\d+\\.\\d+\\.\\d+$"))' | sort -V | tail -n1)
-          if [ -z "$PREV_VERSION" ]; then
-            PREV_VERSION="0.0.0"
-          fi
-        fi
-        
-        echo "PREV_VERSION=${PREV_VERSION}" >> $GITHUB_OUTPUT
-        echo "Previous version: ${PREV_VERSION}"
-
+        VERSIONS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/user/packages/container/app/versions" \
+          | jq -r '.[].metadata.container.tags[]' \
+          | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' || echo "0.0.0")
+        LATEST_VERSION=$(echo "$VERSIONS" | sort -V | tail -n1)
+        echo "LATEST_VERSION=${LATEST_VERSION}" >> $GITHUB_OUTPUT
+  
     - name: Bump version
       id: bump_version
       run: |
-        IFS='.' read -ra VERSION_PARTS <<< "${{ steps.get_version.outputs.PREV_VERSION }}"
+        IFS='.' read -ra VERSION_PARTS <<< "${{ steps.get_version.outputs.LATEST_VERSION }}"
         MAJOR=${VERSION_PARTS[0]:-0}
         MINOR=${VERSION_PARTS[1]:-0}
         PATCH=$((${VERSION_PARTS[2]:-0} + 1))
         NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_OUTPUT
-
+  
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
