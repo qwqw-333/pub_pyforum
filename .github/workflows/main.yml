@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   
   test:
@@ -93,11 +97,20 @@ jobs:
     - name: Get previous version
       id: get_version
       run: |
-        PREV_VERSION=$(curl -s https://api.github.com/repos/${{ github.repository }}/packages/container/app/versions | jq -r '.[].metadata.container.tags[] | select(test("^\\d+\\.\\d+\\.\\d+$"))' | sort -V | tail -n1)
+        VERSIONS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/packages/container/app/versions)
+        if [ $? -ne 0 ]; then
+          echo "Error fetching versions"
+          exit 1
+        fi
+        echo "API Response:"
+        echo "$VERSIONS" | jq '.'
+        
+        PREV_VERSION=$(echo "$VERSIONS" | jq -r '.[].metadata.container.tags[]? // empty | select(test("^\\d+\\.\\d+\\.\\d+$"))' | sort -V | tail -n1)
         if [ -z "$PREV_VERSION" ]; then
           PREV_VERSION="0.0.0"
         fi
         echo "PREV_VERSION=${PREV_VERSION}" >> $GITHUB_OUTPUT
+        echo "Previous version: ${PREV_VERSION}"
 
     - name: Bump version
       id: bump_version
