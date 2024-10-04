@@ -97,18 +97,29 @@ jobs:
     - name: Get previous version
       id: get_version
       run: |
-        VERSIONS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/packages/container/app/versions)
+        PACKAGES=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/packages)
         if [ $? -ne 0 ]; then
-          echo "Error fetching versions"
+          echo "Error fetching packages"
           exit 1
         fi
-        echo "API Response:"
-        echo "$VERSIONS" | jq '.'
+        echo "API Response (Packages):"
+        echo "$PACKAGES" | jq '.'
         
-        PREV_VERSION=$(echo "$VERSIONS" | jq -r '.[].metadata.container.tags[]? // empty | select(test("^\\d+\\.\\d+\\.\\d+$"))' | sort -V | tail -n1)
-        if [ -z "$PREV_VERSION" ]; then
+        APP_PACKAGE_ID=$(echo "$PACKAGES" | jq -r '.[] | select(.name=="app") | .id')
+        if [ -z "$APP_PACKAGE_ID" ]; then
+          echo "App package not found. Setting initial version."
           PREV_VERSION="0.0.0"
+        else
+          VERSIONS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/packages/container/${APP_PACKAGE_ID}/versions)
+          echo "API Response (Versions):"
+          echo "$VERSIONS" | jq '.'
+          
+          PREV_VERSION=$(echo "$VERSIONS" | jq -r '.[].metadata.container.tags[]? // empty | select(test("^\\d+\\.\\d+\\.\\d+$"))' | sort -V | tail -n1)
+          if [ -z "$PREV_VERSION" ]; then
+            PREV_VERSION="0.0.0"
+          fi
         fi
+        
         echo "PREV_VERSION=${PREV_VERSION}" >> $GITHUB_OUTPUT
         echo "Previous version: ${PREV_VERSION}"
 
