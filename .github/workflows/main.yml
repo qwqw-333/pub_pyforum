@@ -20,7 +20,7 @@ jobs:
         image: postgres:16
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: forum
         options: >-
           --health-cmd pg_isready
@@ -53,23 +53,23 @@ jobs:
         python manage.py migrate
         python manage.py test
       env:
-        SECRET_KEY: "+n4ln69zapa2gw2f8l26#v5vyry^jdo3nx)*w*px)c3l3j%bhl"
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
         PG_DB: forum
         PG_USER: postgres
-        PG_PASSWORD: postgres
+        PG_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         DB_HOST: localhost
         DB_PORT: 5432
         PGADMIN_EMAIL: admin@admin.com
-        PGADMIN_PASSWORD: MTNy7neRDqAL8YBw
+        PGADMIN_PASSWORD: ${{ secrets.PGADMIN_PASSWORD }}
         DJANGO_SUPERUSER_EMAIL: admin@mail.net
         DJANGO_SUPERUSER_USERNAME: admin
-        DJANGO_SUPERUSER_PASSWORD: 7znYRa4ZzYrxvmRN
+        DJANGO_SUPERUSER_PASSWORD: ${{ secrets.DJANGO_SUPERUSER_PASSWORD }}
         EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
         EMAIL_HOST: someuser@gmail.com
         EMAIL_PORT: 587
         EMAIL_USE_TLS: 1
         EMAIL_HOST_USER: test@test.com
-        EMAIL_HOST_PASSWORD: gHfQPdVnK3MST2K8
+        EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
         CORS_ORIGIN_WHITELIST: ""
   
   build-and-push:
