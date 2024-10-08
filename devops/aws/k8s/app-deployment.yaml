@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: ghcr.io/qwqw-333/pub_pyforum/app:0.0.1
+        image: ghcr.io/qwqw-333/pub_pyforum/app:latest
         ports:
         - containerPort: 8000
         env:

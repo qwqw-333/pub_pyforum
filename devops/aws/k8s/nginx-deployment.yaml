@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: ghcr.io/qwqw-333/pub_pyforum/nginx:0.0.2
+          image: ghcr.io/qwqw-333/pub_pyforum/nginx:latest
           ports:
             - containerPort: 80
       restartPolicy: Always
