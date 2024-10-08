@@ -97,9 +97,8 @@ jobs:
     - name: Get latest version
       id: get_version
       run: |
-        PACKAGE_NAME="app"
         VERSIONS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/orgs/${{ github.repository_owner }}/packages/container/${PACKAGE_NAME}/versions" \
+          "https://api.github.com/orgs/${{ github.repository_owner }}/packages/container/app/versions" \
           | jq -r '.[].metadata.container.tags[]' \
           | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' || echo "0.0.0")
           
