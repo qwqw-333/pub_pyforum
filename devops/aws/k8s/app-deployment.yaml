@@ -112,9 +112,9 @@ spec:
                 key: CORS_ORIGIN_WHITELIST
         resources:
           requests:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: "100m"    # 0.1 vCPU
+            memory: "256Mi"
           limits:
-            memory: "1Gi"
-            cpu: "1"
+            cpu: "500m"    # 0.5 vCPU
+            memory: "512Mi"
       restartPolicy: Always
