@@ -14,3 +14,4 @@ __local_settings.py
 /*/migrations/
 .coverage
 .env
+devops/aws/terraform/terraform.tfvars
