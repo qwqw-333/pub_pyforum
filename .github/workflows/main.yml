@@ -70,6 +70,7 @@ jobs:
         EMAIL_HOST_USER: test@test.com
         EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
         CORS_ORIGIN_WHITELIST: ""
+    
     - name: Test
       run: python manage.py test
       env:
