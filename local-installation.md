@@ -1,6 +1,4 @@
-# Installation Guide
-
-## Local Installation
+## Local Installation Guide
 > [!NOTE]
 > Before you start, ensure that you have Docker and Docker Compose installed.
 
@@ -31,5 +29,3 @@
    - After the command executes successfully, the application should be running
    - Open a web browser and go to: http://localhost
    - If the application is running correctly, you should see the application's web interface
-
-## AWS Installation
